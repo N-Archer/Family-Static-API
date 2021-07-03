@@ -54,6 +54,7 @@ def delete_member(id):
         "deleted member": deleted_member,
     }
     return jsonify(response_body), 200
+# delete_member is not working....why? is it the ID?
 
 # this only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':
