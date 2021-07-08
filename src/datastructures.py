@@ -11,10 +11,14 @@ from random import randint
 class FamilyStructure:
     def __init__(self, last_name):
         self.last_name = last_name
+        
 
         # example list of members
         self._members = [
             {
+                "name": "George",
+                "id": 123,
+                "children": [{"name":"Pedro"}],
             }
         ]
 
@@ -24,15 +28,49 @@ class FamilyStructure:
 
     def add_member(self, member):
         # fill this method and update the return
-        self._members.append(member)
+        member["id"] = self._generateId()
+        if "parent" in member:
+            for grandparent in self._members:
+                if grandparent["name"] == member["parent"]:
+                    if "children" in grandparent:
+                        grandparent["children"].append(member)
+                    else:
+                        grandparent["children"] = [member]
+                else:
+                    for parent in grandparent["children"]:
+                        if "children" in parent: 
+                            parent["children"].append(member)
+                        else:
+                            parent["children"] = [member]
+        else: 
+            self._members.append(member)
         return self._members
+
+    def get_descendants(self, id):
+        children = []
+        grandchildren = []
+        for grandparent in self._members:
+            if grandparent["id"] == "id":
+                for child in grandparent["children"]:
+                    children.append(child["name"])
+                    if "children" in child:
+                        for grandchild in child["children"]:
+                            grandchildren.append(grandchild)
+                return {"children":children, "grandchild":grandchild}
+            else:
+                for parent in grandparent["children"]:
+                    if parent["id"] == id:
+                        if "children" in parent:
+                            for child in parent["children"]:
+                                children.append(child["name"])
+                        return  {"children":children  }   
 
     def delete_member(self, id):
         # fill this method and update the return
         for index in range(len(self._members)):
             if self._members[index]["id"] == id:
                 removed = self._members.pop(index)
-        return removed
+                return removed
 
     def get_member(self, id):
         # fill this method and update the return
@@ -44,3 +82,4 @@ class FamilyStructure:
     # this method is done, it returns a list with all the family members
     def get_all_members(self):
         return self._members
+

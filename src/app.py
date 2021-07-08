@@ -47,14 +47,23 @@ def post_member():
     }
     return jsonify(response_body), 200
 
-@app.route('/member/<id>', methods=['DELETE'])
+@app.route('/member/<int:id>', methods=['DELETE'])
 def delete_member(id):
     deleted_member = jackson_family.delete_member(id)
+    members = jackson_family.add_member()
     response_body = {
         "deleted member": deleted_member,
+        "members": members
     }
     return jsonify(response_body), 200
-# delete_member is not working....why? is it the ID?
+
+@app.route('/member/<int:id>')
+def delete_member(id):
+    descendants = jackson_family.get_descendants(id)
+    response_body = {
+        "descendants": descendants,
+    }
+    return jsonify(response_body), 200
 
 # this only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':
